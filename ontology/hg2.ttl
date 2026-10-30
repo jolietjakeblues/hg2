@@ -10,7 +10,7 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 <https://linkeddata.cultureelerfgoed.nl/def/hg2> a owl:Ontology ;
-  owl:versionInfo "0.3.0-draft" ;
+  owl:versionInfo "0.6.0-draft" ;
   dct:title "Histograph 2: historische geografie en bronuitspraken"@nl ;
   dct:description "Experimentele ontologie voor geografische identiteit, tijdgebonden toestanden, bronuitspraken en historische relaties. Geen formele vervanging van rdf.histograph.io."@nl .
 
@@ -115,3 +115,56 @@ hg2:observedEndDate a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rd
 hg2:observedCBSCode a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ; rdfs:label "CBS-code volgens bronrecord"@nl .
 hg2:observedExternalReference a owl:ObjectProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:label "verwijzing in bronrecord"@nl ; rdfs:comment "Behoudt een URI-koppeling als RDF-IRI; geen owl:sameAs-veronderstelling."@nl .
 hg2:observedExternalReferenceLiteral a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ; rdfs:label "letterlijke verwijzing in bronrecord"@nl .
+
+
+@prefix hg2: <https://linkeddata.cultureelerfgoed.nl/def/hg2/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+
+# Additions are merged into hg2.ttl by the build script.
+hg2:PlaceReference rdfs:comment "Een brongebonden verwijzing naar mogelijk een plaats. Eén PlaceReference is niet automatisch één Place. Identificatie vereist een expliciete onderbouwde koppeling."@nl .
+hg2:PlaceAssertion rdfs:comment "Een brongebonden bewering/waarneming; vastlegging ervan is geen aanvaarding als historisch feit. Bronwaardes blijven afzonderlijk van interpretaties."@nl .
+hg2:PlaceState rdfs:comment "Een gemodelleerde toestand van één Place, met eventueel geldigheidsinterval en geometrie. Niet afleiden van bron-begin/einddata zonder broninterpretatie."@nl .
+hg2:HistoricalRelation rdfs:comment "Een geïnterpreteerde historische relatie tussen plaatsen; geen gevolgtrekking op basis van overeenkomstige namen of geometrieën."@nl .
+
+hg2:interpretationOf a owl:ObjectProperty ;
+  rdfs:domain hg2:PlaceState ; rdfs:range hg2:PlaceAssertion ;
+  rdfs:label "interpretatie van uitspraak"@nl ;
+  rdfs:comment "Verbindt een vastgestelde plaats-toestand aan de bronuitspraak die deze interpretatie onderbouwt."@nl .
+hg2:relationEvidence a owl:ObjectProperty ;
+  rdfs:domain hg2:HistoricalRelation ; rdfs:range hg2:PlaceAssertion ;
+  rdfs:label "onderbouwd door bronuitspraak"@nl .
+hg2:identityEvidence a owl:ObjectProperty ;
+  rdfs:domain hg2:Place ; rdfs:range hg2:PlaceReference ;
+  rdfs:label "onderbouwd door plaatsreferentie"@nl ;
+  rdfs:comment "Documenteert welke bronreferentie een plaatsidentificatie onderbouwt; geen equivalentierelatie."@nl .
+hg2:interpretationNote a owl:DatatypeProperty ;
+  rdfs:label "toelichting interpretatie"@nl ;
+  rdfs:comment "Verantwoordt gemaakte keuzes, bijvoorbeeld bij identiteit, datering en relatietype."@nl .
+hg2:temporalRole a owl:ObjectProperty ;
+  rdfs:label "rol van datering"@nl ;
+  rdfs:comment "Optionele classificatie van het soort tijdsgegeven (bijvoorbeeld bestaansduur, toestand of bronproductie). Alleen gebruiken wanneer de betekenis bekend is."@nl .
+
+# Ontwerpbesluit v0.6: expliciete kandidaat-identificatie, geen automatisch owl:sameAs.
+hg2:IdentityHypothesis a owl:Class ; rdfs:subClassOf prov:Entity ;
+  rdfs:label "identiteitshypothese"@nl ;
+  rdfs:comment "Te toetsen hypothese dat bronreferenties naar dezelfde geografische entiteit verwijzen. Geen vastgestelde equivalentie."@nl .
+hg2:hasCandidateReference a owl:ObjectProperty ;
+  rdfs:domain hg2:IdentityHypothesis ; rdfs:range hg2:PlaceReference ;
+  rdfs:label "betreft kandidaat-referentie"@nl .
+hg2:hypothesizedPlace a owl:ObjectProperty ;
+  rdfs:domain hg2:IdentityHypothesis ; rdfs:range hg2:Place ;
+  rdfs:label "veronderstelde plaatsidentiteit"@nl .
+hg2:hypothesisStatus a owl:ObjectProperty ;
+  rdfs:domain hg2:IdentityHypothesis ; rdfs:range skos:Concept ;
+  rdfs:label "status van hypothese"@nl .
+hg2:identityRationale a owl:DatatypeProperty ;
+  rdfs:domain hg2:IdentityHypothesis ; rdfs:range xsd:string ;
+  rdfs:label "motivering identiteit"@nl .
+hg2:boundaryChangeType a owl:Class ;
+  rdfs:subClassOf skos:Concept ;
+  rdfs:label "soort bestuurlijke verandering"@nl .

@@ -1,0 +1,10 @@
+@prefix hg2: <https://linkeddata.cultureelerfgoed.nl/def/hg2/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+hg2:GemeentegeschiedenisObservationShape a sh:NodeShape ;
+  sh:targetSubjectsOf hg2:observedStartDate ;
+  sh:property [sh:path hg2:aboutPlaceReference; sh:minCount 1; sh:maxCount 1] ;
+  sh:property [sh:path hg2:observedName; sh:minCount 1] ;
+  sh:property [sh:path hg2:observedStartDate; sh:maxCount 1] ;
+  sh:property [sh:path hg2:observedEndDate; sh:maxCount 1] ;
+  sh:property [sh:path hg2:sourceRecord; sh:minCount 1] .

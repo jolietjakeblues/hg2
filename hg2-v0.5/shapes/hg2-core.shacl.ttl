@@ -1,0 +1,33 @@
+@prefix hg2: <https://linkeddata.cultureelerfgoed.nl/def/hg2/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+hg2:PlaceReferenceCoreShape a sh:NodeShape ; sh:targetClass hg2:PlaceReference ;
+  sh:property [sh:path prov:wasDerivedFrom; sh:minCount 1; sh:nodeKind sh:IRI] ;
+  sh:property [sh:path hg2:refersToPlace; sh:class hg2:Place; sh:maxCount 1] .
+
+hg2:PlaceAssertionCoreShape a sh:NodeShape ; sh:targetClass hg2:PlaceAssertion ;
+  sh:or (
+    [sh:property [sh:path hg2:aboutPlaceReference; sh:minCount 1]]
+    [sh:property [sh:path hg2:aboutPlace; sh:minCount 1]]
+    [sh:property [sh:path hg2:aboutState; sh:minCount 1]]
+    [sh:property [sh:path hg2:assertsRelation; sh:minCount 1]]
+  ) ;
+  sh:property [sh:path hg2:sourceRecord; sh:minCount 1; sh:nodeKind sh:IRI] ;
+  sh:property [sh:path hg2:aboutPlaceReference; sh:maxCount 1; sh:class hg2:PlaceReference] ;
+  sh:property [sh:path hg2:observedGeometry; sh:class geo:Geometry] .
+
+hg2:PlaceStateCoreShape a sh:NodeShape ; sh:targetClass hg2:PlaceState ;
+  sh:property [sh:path hg2:stateOf; sh:minCount 1; sh:maxCount 1; sh:class hg2:Place] ;
+  sh:property [sh:path hg2:validDuring; sh:maxCount 1; sh:class time:TemporalEntity] ;
+  sh:property [sh:path hg2:hasGeometry; sh:class geo:Geometry] .
+
+hg2:HistoricalRelationCoreShape a sh:NodeShape ; sh:targetClass hg2:HistoricalRelation ;
+  sh:property [sh:path hg2:relationSubject; sh:minCount 1; sh:maxCount 1; sh:class hg2:Place] ;
+  sh:property [sh:path hg2:relationObject; sh:minCount 1; sh:maxCount 1; sh:class hg2:Place] ;
+  sh:property [sh:path hg2:relationType; sh:minCount 1; sh:maxCount 1; sh:nodeKind sh:IRI] .
+
+hg2:ObservedGeometryShape a sh:NodeShape ; sh:targetObjectsOf hg2:observedGeometry ;
+  sh:property [sh:path geo:asWKT; sh:minCount 1; sh:datatype geo:wktLiteral] .

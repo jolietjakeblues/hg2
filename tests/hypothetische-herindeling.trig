@@ -1,0 +1,15 @@
+@prefix hg2: <https://linkeddata.cultureelerfgoed.nl/def/hg2/> .
+@prefix ex: <https://example.org/hg2/test/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+<https://linkeddata.cultureelerfgoed.nl/graph/hg2-test-herindeling> {
+ ex:oldA a hg2:Place .
+ ex:oldB a hg2:Place .
+ ex:newC a hg2:Place .
+ ex:merger a skos:Concept ; skos:prefLabel "hypothetische samenvoeging"@nl .
+ ex:source a prov:Entity .
+ ex:statement a hg2:PlaceAssertion ; hg2:sourceRecord ex:source ; hg2:assertsRelation ex:relA .
+ ex:relA a hg2:HistoricalRelation ; hg2:relationSubject ex:oldA ; hg2:relationObject ex:newC ; hg2:relationType ex:merger ; hg2:relationEvidence ex:statement .
+ ex:statementB a hg2:PlaceAssertion ; hg2:sourceRecord ex:source ; hg2:assertsRelation ex:relB .
+ ex:relB a hg2:HistoricalRelation ; hg2:relationSubject ex:oldB ; hg2:relationObject ex:newC ; hg2:relationType ex:merger ; hg2:relationEvidence ex:statementB .
+}

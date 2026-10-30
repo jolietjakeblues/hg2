@@ -1,55 +1,56 @@
-# HG2 v0.4: TriG-conventie
+# HG2 v0.6.0-draft: identiteit, historische toestanden en bronuitspraken
 
-**Data worden uitsluitend als TriG (`.trig`) gepubliceerd.** De ontologie blijft Turtle (`ontology/hg2.ttl`). SHACL-shapes blijven Turtle (`shapes/hg2.shacl.ttl`), omdat ze een schema zijn, geen dataset.
+**Ontologie-IRI:** `https://linkeddata.cultureelerfgoed.nl/def/hg2`  
+**Termnamespace:** `https://linkeddata.cultureelerfgoed.nl/def/hg2/`
 
-Elk HG2-databestand heeft exact één named graph, met de bronset als naam:
+Experimentele vervolgstap op v0.4. Er is **geen automatische omzetting** van bronrecord naar duurzame geografische identiteit. Bestaande data blijven TriG, ontologie en shapes blijven Turtle.
+
+## Mappen
+
+- `ontology/hg2.ttl`: HG2-ontologie (v0.5.0-draft), met bestaande eigenschappen en drie nieuwe verantwoordingsrelaties.
+- `shapes/hg2-core.shacl.ttl`: kernvalidatie voor bronreferenties, uitspraken, historische toestanden en relaties.
+- `shapes/verdwenendorpen.shacl.ttl`: datasetprofiel voor Verdwenen dorpen.
+- `shapes/gemeentegeschiedenis.shacl.ttl`: datasetprofiel voor Gemeentegeschiedenis.
+- `examples/*.trig`: bestaande v0.4-data onveranderd meegeleverd als testmateriaal.
+- `scripts/convert_*.py`: bestaande conversiescripts, ongewijzigd.
+- `scripts/check_datasets.py`: eenvoudige aanvullende kwaliteitscontroles.
+- `docs/modelleerbeslissingen.md`: semantische beslissingen en vragen.
+
+## Named graphs
 
 - `https://linkeddata.cultureelerfgoed.nl/graph/verdwenendorpen`
 - `https://linkeddata.cultureelerfgoed.nl/graph/gemeentegeschiedenis`
 
-De HG2-conversies vormen een **alternatieve representatie** van de bronset. Laad bronexport en HG2-conversie **niet tegelijk in dezelfde graph** zonder expliciet vervangingsbeleid. Er worden nog geen duurzame plaatsidentiteiten of historische opvolgingen afgeleid.
-
-Uitvoer:
-
-- `examples/verdwenendorpen-hg2-v0.4.trig`
-- `examples/gemeentegeschiedenis-hg2-v0.4.trig`
-
-Herhalen (vanuit de projectmap):
+## Zelf testen
 
 ```powershell
-python scripts/convert_verdwenendorpen.py bron-verdwenendorpen.trig.gz examples/verdwenendorpen-hg2-v0.4.trig
-python scripts/convert_gemeentegeschiedenis.py bron-gemeentegeschiedenis.trig.gz examples/gemeentegeschiedenis-hg2-v0.4.trig
+cd C:\AI\hg2
+python -m pip install rdflib pyshacl
+python scripts/check_datasets.py
+python -m pyshacl -s shapes/hg2-core.shacl.ttl -sf turtle -df trig -f human examples/verdwenendorpen-hg2-v0.4.trig
+python -m pyshacl -s shapes/verdwenendorpen.shacl.ttl -sf turtle -df trig -f human examples/verdwenendorpen-hg2-v0.4.trig
+python -m pyshacl -s shapes/hg2-core.shacl.ttl -sf turtle -df trig -f human examples/gemeentegeschiedenis-hg2-v0.4.trig
+python -m pyshacl -s shapes/gemeentegeschiedenis.shacl.ttl -sf turtle -df trig -f human examples/gemeentegeschiedenis-hg2-v0.4.trig
 ```
 
-De scripts lezen een `.trig.gz` en schrijven `.trig`; het oorspronkelijke named graph-label wordt gebruikt.
+Let op: sommige SHACL-tools behandelen TriG named graphs anders (union versus default graph). Bij problemen laad de gewenste named graph als aparte datagraph in de validator. De formele SHACL-validatie is nog niet daadwerkelijk uitgevoerd in deze omgeving, alleen parse- en programmatische controles.
 
----
+## Beslissingen v0.5
 
-# HG2 v0.3-draft – gemeentegeschiedenis-pilot
+1. Plaatsreferenties zijn geen vastgestelde plaatsen.
+2. Brondata vormen geen automatisch bewijs van een historische toestand.
+3. `identityEvidence`, `interpretationOf` en `relationEvidence` leggen menselijke interpretaties traceerbaar vast.
+4. Dateringen worden pas geïnterpreteerd als hun betekenis is vastgesteld.
+5. Historische relaties vergen onderbouwing en een gekozen relatietype.
 
-**Ontologie:** `https://linkeddata.cultureelerfgoed.nl/def/hg2`  
-**Prefix:** `https://linkeddata.cultureelerfgoed.nl/def/hg2/`  
-**Status:** experimentele aanvulling op v0.2, geen productiemigratie.
+## Geen migratie
 
-Deze pilot bewaart de informatie uit **4.551 gemeenterecords** als 4.551 `PlaceReference`-objecten en 4.551 `PlaceAssertion`-objecten. De originele export is ook meegeleverd zodat de conversie controleerbaar blijft.
+De twee bestaande TriG-graphs worden in v0.5 niet vervangen. Het gaat eerst om het verbeteren van het model en de validator.
 
-De datums `schema:startDate` en `schema:endDate` komen terecht in `hg2:observedStartDate` en `hg2:observedEndDate`. We nemen **niet** aan dat dit het ontstaan en einde van een duurzame gemeente-identiteit is. Een ontbrekende datum krijgt geen fictieve waarde.
+## Nieuw in v0.6
+- `examples/rotterdam-identiteitstest.trig`: 17 echte bronreferenties en een toetsbare hypothese, geen identiteitsclaim.
+- `tests/hypothetische-herindeling.trig`: expliciet verzonnen fusiescenario voor relaties.
+- `shapes/hg2-interpretatie.shacl.ttl`: strenge aanvullende SHACL voor geïnterpreteerde toestanden en relaties.
+- `docs/identiteitstest-v0.6.md`: aannames, open vragen en ontwerpkeuzes.
 
-Er worden geen `hg2:Place`, `hg2:PlaceState` of `hg2:HistoricalRelation` verzonnen. Ook identieke namen of CBS-codes leiden niet automatisch tot fusie van records. Een `dc:URI` wordt niet automatisch `owl:sameAs`.
-
-## Inhoud
-- `ontology/hg2.ttl`: ontologie v0.3 (toevoegingen voor bronwaarnemingen)
-- `shapes/hg2.shacl.ttl`: SHACL inclusief test gemeenterecords
-- `scripts/convert_gemeentegeschiedenis.py`: reproduceerbare conversie
-- `examples/gemeentegeschiedenis-hg2-v0.3.ttl`: volledige proefconversie
-- `examples/source-gemeentegeschiedenis.trig.gz`: onaangetaste oorspronkelijke export
-- `docs/gemeentegeschiedenis-analyse.md`: overzicht en volgende modelleervragen
-
-## Zelf draaien
-```powershell
-pip install rdflib pyshacl
-python scripts/convert_gemeentegeschiedenis.py examples/source-gemeentegeschiedenis.trig.gz examples/gemeentegeschiedenis-hg2-v0.3.ttl
-pyshacl -s shapes/hg2.shacl.ttl -e ontology/hg2.ttl examples/gemeentegeschiedenis-hg2-v0.3.ttl
-```
-
-Bewust niet de eindconclusie: pas wanneer we herindelingen of een juridisch doorlopende gemeente-identiteit kunnen onderbouwen, modelleren we `PlaceState` en `HistoricalRelation`.
+Belangrijk: bestaande productiedatasets zijn **niet** gewijzigd. Testgraphs niet zonder review publiceren.
