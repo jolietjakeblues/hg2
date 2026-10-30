@@ -1,21 +1,24 @@
-# hg2: Histograph 2 (werkversie)
+# HG2 – stap 2: brongetrouwe waarnemingen (0.2.0-draft)
 
-**Ontologie-IRI:** `https://linkeddata.cultureelerfgoed.nl/def/hg2`  
-**Termnamespace:** `https://linkeddata.cultureelerfgoed.nl/def/hg2/`  
-**Status:** 0.1.0-draft, geen productiepublicatie of formele vervanging van Histograph.
+Deze repository is een **experimentele** doorontwikkeling van de hg2-starter en de pilot Verdwenen dorpen.
 
-Een experimenteel, gegevensgericht model voor historische geografie: identiteit, toestanden, brongebonden uitspraken en historische relaties.
+- Ontologie-IRI: `https://linkeddata.cultureelerfgoed.nl/def/hg2`
+- Begrippen-namespace: `https://linkeddata.cultureelerfgoed.nl/def/hg2/` (slash, geen hash)
+- `ontology/hg2.ttl`: bestaande starter met nieuwe waarnemings- en referentietermen
+- `shapes/hg2.shacl.ttl`: aanvullende controles
+- `scripts/convert_verdwenendorpen.py`: reproduceerbare conversie
+- `examples/verdwenendorpen-hg2-v0.2.ttl`: de geconverteerde 562 records
+- `docs/modelleerbeslissingen.md`: besluiten, onzekerheden en vervolgvragen
 
-## Bestanden
-- `ontology/hg2.ttl`: eerste OWL/RDFS-ontologie.
-- `shapes/hg2.shacl.ttl`: eerste SHACL-regels, waarschuwingen waar informatie mogelijk ontbreekt.
-- `examples/schematic-example.ttl`: synthetisch voorbeeld, nadrukkelijk geen echte ErfGeo-data.
-- `docs/modelleerbeslissingen.md`: uitgangspunten, open vragen en valkuilen.
+## Reproduceren
 
-## Status en beperkingen
-Dit is **geen** volledige conversie van ErfGeo/Histograph. Specifiek `hg:PlaceInTime` is semantisch nog niet bewezen gelijk aan `hg2:Place`, `hg2:PlaceState` of `hg2:PlaceAssertion`. Daarom zijn geen riskante equivalentierelaties toegevoegd.
+```powershell
+python -m pip install rdflib
+python scripts/convert_verdwenendorpen.py bron-verdwenendorpen.trig.gz examples/verdwenendorpen-hg2-v0.2.ttl
+```
 
-Eerstvolgende stap: op echte ErfGeo-records (gemeentegeschiedenis, Kloekecodes en verdwenen dorpen) toetsen welke identiteit, toestand en broninformatie vaststaan en waar alleen onzekerheid bestaat. Daarna historische relatievocabulaire, migratiemapping en shape-regels aanscherpen.
+## Belangrijk
 
-## Terminologie
-`PlaceAssertion` is voorlopig een generieke brongebonden bewering. De ontologie legt nog niet formeel vast *welke* propositie beweerd wordt. Dit is een expliciet ontwerpvraagstuk, geen afgeronde oplossing.
+De 562 `PlaceReference`-objecten zijn **geen vastgestelde afzonderlijke plaatsen**. Gelijknamige plaatsen worden niet samengevoegd. Er zijn geen historische toestanden of gebeurtenissen afgeleid uit niet-geduide datums.
+
+Dit is een verkenning, geen advies om een bestaande productieontologie te vervangen.

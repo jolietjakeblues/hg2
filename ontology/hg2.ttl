@@ -10,7 +10,7 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 <https://linkeddata.cultureelerfgoed.nl/def/hg2> a owl:Ontology ;
-  owl:versionInfo "0.1.0-draft" ;
+  owl:versionInfo "0.2.0-draft" ;
   dct:title "Histograph 2: historische geografie en bronuitspraken"@nl ;
   dct:description "Experimentele ontologie voor geografische identiteit, tijdgebonden toestanden, bronuitspraken en historische relaties. Geen formele vervanging van rdf.histograph.io."@nl .
 
@@ -67,3 +67,42 @@ hg2:sourceRecord a owl:ObjectProperty ; rdfs:domain hg2:PlaceAssertion ;
 hg2:confidenceNote a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range xsd:string ;
   rdfs:label "toelichting onzekerheid"@nl ;
   rdfs:comment "Tekstuele vastlegging van onzekerheid, zonder kunstmatige numerieke zekerheid te vereisen."@nl .
+
+# Toevoegingen v0.2, ter ondersteuning van brongetrouwe conversies.
+# Assertions zijn bronwaarnemingen. Niet elke bronwaarneming is een
+# bewering over de werkelijkheid; interpretatie blijft een aparte stap.
+
+hg2:PlaceReference a owl:Class ; rdfs:subClassOf prov:Entity ;
+  rdfs:label "voorlopige plaatsreferentie"@nl ;
+  rdfs:comment "Verwijst voorlopig naar een mogelijk geografisch object volgens één bronrecord. Niet gelijkstellen aan een duurzame hg2:Place zonder identiteitsonderzoek."@nl .
+
+hg2:refersToPlace a owl:ObjectProperty ;
+  rdfs:domain hg2:PlaceReference ; rdfs:range hg2:Place ;
+  rdfs:label "verwijst naar vastgestelde plaats"@nl .
+
+hg2:aboutPlaceReference a owl:ObjectProperty ;
+  rdfs:domain hg2:PlaceAssertion ; rdfs:range hg2:PlaceReference ;
+  rdfs:label "betreft voorlopige plaatsreferentie"@nl .
+
+hg2:observedName a owl:DatatypeProperty ;
+  rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ;
+  rdfs:label "naam in bronrecord"@nl .
+
+hg2:observedGeometry a owl:ObjectProperty ;
+  rdfs:domain hg2:PlaceAssertion ; rdfs:range geo:Geometry ;
+  rdfs:label "geometrie in bronrecord"@nl ;
+  rdfs:comment "Geometrie van de bronbeschrijving, niet automatisch historische begrenzing of definitieve ligging."@nl .
+
+hg2:uninterpretedDate a owl:DatatypeProperty ;
+  rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ;
+  rdfs:label "niet geïnterpreteerde brondatering"@nl ;
+  rdfs:comment "Letterlijke datering waarvan de semantische betekenis nog niet is vastgesteld; is geen validDuring of sourceDate."@nl .
+
+hg2:observedSubject a owl:ObjectProperty ;
+  rdfs:domain hg2:PlaceAssertion ;
+  rdfs:label "onderwerp volgens bronrecord"@nl ;
+  rdfs:comment "Onderwerpsterm uit bron; niet noodzakelijk het type van de plaats."@nl .
+
+hg2:sourceDescription a owl:DatatypeProperty ;
+  rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ;
+  rdfs:label "bronvermelding als tekst"@nl .

@@ -15,6 +15,7 @@ hg2:PlaceAssertionShape a sh:NodeShape ;
   sh:targetClass hg2:PlaceAssertion ;
   sh:or (
     [sh:property [sh:path hg2:aboutPlace ; sh:minCount 1]]
+    [sh:property [sh:path hg2:aboutPlaceReference ; sh:minCount 1]]
     [sh:property [sh:path hg2:aboutState ; sh:minCount 1]]
     [sh:property [sh:path hg2:assertsRelation ; sh:minCount 1]]
   ) ;
@@ -25,3 +26,14 @@ hg2:HistoricalRelationShape a sh:NodeShape ;
   sh:property [sh:path hg2:relationSubject ; sh:class hg2:Place ; sh:minCount 1 ; sh:maxCount 1] ;
   sh:property [sh:path hg2:relationObject ; sh:class hg2:Place ; sh:minCount 1 ; sh:maxCount 1] ;
   sh:property [sh:path hg2:relationType ; sh:minCount 1 ; sh:maxCount 1] .
+
+
+hg2:PlaceReferenceShape a sh:NodeShape ;
+  sh:targetClass hg2:PlaceReference ;
+  sh:property [ sh:path prov:wasDerivedFrom ; sh:minCount 1 ;
+    sh:message "Een voorlopige plaatsreferentie heeft een herleidbaar bronrecord nodig."@nl ] .
+
+hg2:ObservationShape a sh:NodeShape ;
+  sh:targetClass hg2:PlaceAssertion ;
+  sh:property [ sh:path hg2:observedGeometry ; sh:class geo:Geometry ] ;
+  sh:property [ sh:path hg2:aboutPlaceReference ; sh:class hg2:PlaceReference ; sh:maxCount 1 ] .

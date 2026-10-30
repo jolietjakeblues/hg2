@@ -1,24 +1,23 @@
-# Modelleerbeslissingen en open vragen (hg2 0.1.0-draft)
+# Besluiten en open vragen (0.2.0-draft)
 
-## Besloten als werkhypothese
-1. `hg2:Place` = duurzame geografische identiteit, *niet* hetzelfde als een historische toestand of bronrecord.
-2. `hg2:PlaceState` = afgebakende toestand. Een splitsing of herindeling vereist expliciete identiteitsregels; een gewijzigde geometrie is niet per definitie een nieuwe plaats.
-3. `hg2:PlaceAssertion` = brongebonden bewering, met verwijzing naar bron of bronrecord; de waarheid ervan wordt niet aangenomen.
-4. Onderscheid geldigheid van een verschijnsel (`validDuring`) en datering van de bron (`sourceDate`).
-5. In deze versie *geen* `owl:sameAs` naar `hg:PlaceInTime`; de semantiek verschilt mogelijk.
-6. Typen als `hg:Municipality` worden niet automatisch `owl:Class` in hg2. Gebruik voor classificatie bij voorkeur beheerde concepten.
+## Voorlopige besluiten
+1. `hg2:Place` vertegenwoordigt een vastgestelde geografische identiteit, niet automatisch een bronrecord.
+2. `hg2:PlaceReference` is een brongebonden, **voorlopige** referentie en mag zonder identiteitsonderzoek niet gelijkgesteld worden aan `hg2:Place`.
+3. `hg2:PlaceAssertion` bewaart bronwaarnemingen met expliciete eigenschappen. Dit is **nog geen algemeen propositiemodel**.
+4. `dc:date` uit Verdwenen dorpen wordt `hg2:uninterpretedDate` en **niet** `hg2:validDuring` of `hg2:sourceDate`.
+5. WKT uit de bron wordt een afzonderlijke `geo:Geometry`, gekoppeld via `hg2:observedGeometry` aan de bronuitspraak; niet rechtstreeks aan een duurzame plaats.
+6. Identieke namen zoals Westkerke geven geen bewijs voor identiteit.
 
-## Nog niet besloten
-- Is een juridisch bestuursorgaan een `Place`, een afzonderlijke organisatie, of een combinatie van beide?
-- Wanneer zijn twee historische beschrijvingen dezelfde geografische entiteit?
-- Hoe modelleren we concurrerende grensinterpretaties voor dezelfde periode: alternatieve toestanden of tegenstrijdige uitspraken over geometrie?
-- Hoe duiden we een precies onbekende gebeurtenisdatum, bijvoorbeeld "verdwenen circa 1500"?
-- Welke ontologie of vocabulaire definieert opvolging, splitsing, absorptie en bestuurlijke herindeling?
-- Moet `PlaceAssertion` een uitspraakinhoud expliciet als afzonderlijke resource modelleren, of volstaat een gedocumenteerde verwijzing naar een toestand/relatie?
-- Wie beheert URI's en koppelt bronrecords aan identiteiten?
+## Nog te onderzoeken
+- Wat dateert `dc:date` inhoudelijk? Verdwijning, bronvermelding, andere gebeurtenis?
+- Beschrijven de punten een historische locatie, een schatting, of een moderne referentiepositie?
+- Hoe representeren we een inhoudelijke propositie (predicaat, object) en broninterpretatie zonder nodeloze reificatie?
+- Wat is een plaats bij verplaatsing, naamswijziging, bestuurlijke fusie of fysieke vernietiging?
+- Wanneer en door wie wordt een `PlaceReference` gekoppeld aan een vastgestelde `Place`?
+- Is een afzonderlijke `PlaceState` in alle toepassingen nodig, of alleen waar expliciete toestandverschillen zijn?
 
-## Niet doen
-- `http://rdf.histograph.io/` en `https://rdf.histograph.io/` stilzwijgend gelijkstellen.
-- Een PiT-record zonder bewijs omzetten naar een blijvende identiteit.
-- Het bronjaar van een verdwenen dorp als bestaans-einddatum interpreteren zonder herkomstbewijs.
-- Bestaande historische relaties gelijkstellen aan GeoSPARQL-topologie zonder semantisch bewijs.
+## Migratie
+Bestaande 0.1 pilots creëerden recordgebaseerde `hg2:Place`-URI’s. Deze zijn **niet zomaar** in echte identiteiten te migreren. In 0.2 worden daarom nieuwe, duidelijke `hg2-reference/`-URI's gebruikt; oude proef-URI's blijven experimenteel.
+
+## Technische controle
+OWL-ontologie en RDF-output zijn syntactisch geparseerd met RDFLib. SHACL-shapes zijn syntactisch geparseerd; er is **geen volledige SHACL-validatie** uitgevoerd.
