@@ -1,0 +1,17 @@
+# SYNTHETISCH voorbeeld; geen claim over een echte plaats of bron.
+@prefix hg2: <https://linkeddata.cultureelerfgoed.nl/def/hg2/> .
+@prefix ex: <https://example.org/hg2-demo/> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:place1 a hg2:Place ; hg2:hasState ex:state1 ; hg2:hasName ex:name1 .
+ex:name1 a hg2:PlaceName ; hg2:nameValue "Voorbeeldplaats"@nl .
+ex:state1 a hg2:PlaceState ; hg2:stateOf ex:place1 ; hg2:validDuring ex:period1 ; hg2:hasGeometry ex:geometry1 .
+ex:period1 a time:ProperInterval ; time:hasBeginning ex:begin ; time:hasEnd ex:end .
+ex:begin a time:Instant ; time:inXSDDate "1812-01-01"^^xsd:date .
+ex:end a time:Instant ; time:inXSDDate "1817-01-01"^^xsd:date .
+ex:geometry1 a geo:Geometry ; geo:asWKT "POINT(5.0 52.0)"^^geo:wktLiteral .
+ex:assertion1 a hg2:PlaceAssertion ; hg2:aboutState ex:state1 ; prov:wasDerivedFrom ex:source1 .
+ex:source1 a prov:Entity .

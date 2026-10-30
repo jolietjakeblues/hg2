@@ -1,0 +1,69 @@
+@prefix hg2: <https://linkeddata.cultureelerfgoed.nl/def/hg2/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<https://linkeddata.cultureelerfgoed.nl/def/hg2> a owl:Ontology ;
+  owl:versionInfo "0.1.0-draft" ;
+  dct:title "Histograph 2: historische geografie en bronuitspraken"@nl ;
+  dct:description "Experimentele ontologie voor geografische identiteit, tijdgebonden toestanden, bronuitspraken en historische relaties. Geen formele vervanging van rdf.histograph.io."@nl .
+
+hg2:Place a owl:Class ; rdfs:subClassOf geo:Feature ;
+  rdfs:label "geografische entiteit"@nl ;
+  rdfs:comment "Duurzame identiteit van een geografische entiteit, onafhankelijk van haar naam, geometrie en bronbeschrijvingen. Niet automatisch identiek aan een juridische bestuursorganisatie."@nl .
+
+hg2:PlaceState a owl:Class ; rdfs:subClassOf prov:Entity ;
+  rdfs:label "historische toestand"@nl ;
+  rdfs:comment "Een afgebakende toestand van één geografische entiteit gedurende een periode; geen bronuitspraak. De afbakening kan berusten op een onderzoekskeuze."@nl .
+
+hg2:PlaceAssertion a owl:Class ; rdfs:subClassOf prov:Entity ;
+  rdfs:label "brongebonden uitspraak"@nl ;
+  rdfs:comment "Een specifieke bewering over een geografische entiteit, toestand of relatie, afkomstig uit of afgeleid van een bron. Een uitspraak hoeft niet waar te zijn."@nl .
+
+hg2:HistoricalRelation a owl:Class ; rdfs:subClassOf prov:Entity ;
+  rdfs:label "historische relatie"@nl ;
+  rdfs:comment "Een expliciete, eventueel tijdgebonden historische relatie tussen twee geografische entiteiten of toestanden."@nl .
+
+hg2:PlaceName a owl:Class ; rdfs:label "plaatsnaamaanduiding"@nl ;
+  rdfs:comment "Een naamtoekenning met mogelijke tijd-, taal- en broncontext; niet de identiteit van de plaats."@nl .
+
+hg2:hasState a owl:ObjectProperty ; rdfs:domain hg2:Place ; rdfs:range hg2:PlaceState ;
+  owl:inverseOf hg2:stateOf ; rdfs:label "heeft toestand"@nl .
+hg2:stateOf a owl:ObjectProperty ; rdfs:domain hg2:PlaceState ; rdfs:range hg2:Place ; rdfs:label "toestand van"@nl .
+
+hg2:aboutPlace a owl:ObjectProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range hg2:Place ; rdfs:label "betreft plaats"@nl .
+hg2:aboutState a owl:ObjectProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range hg2:PlaceState ; rdfs:label "betreft toestand"@nl .
+hg2:assertsRelation a owl:ObjectProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range hg2:HistoricalRelation ; rdfs:label "beweert relatie"@nl .
+
+hg2:hasName a owl:ObjectProperty ; rdfs:domain hg2:Place ; rdfs:range hg2:PlaceName ; rdfs:label "heeft naamaanduiding"@nl .
+hg2:nameValue a owl:DatatypeProperty ; rdfs:domain hg2:PlaceName ; rdfs:range rdf:langString ; rdfs:label "naamtekst"@nl .
+
+hg2:validDuring a owl:ObjectProperty ; rdfs:range time:TemporalEntity ;
+  rdfs:label "geldig gedurende"@nl ; rdfs:comment "Periode waarop de entiteit, toestand, naam of relatie betrekking heeft, niet noodzakelijk het tijdstip van bronproductie."@nl .
+hg2:sourceDate a owl:ObjectProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range time:TemporalEntity ;
+  rdfs:label "datering bron"@nl ; rdfs:comment "Wanneer de bron ontstond; los van de historische periode waarop de uitspraak betrekking heeft."@nl .
+
+hg2:relationSubject a owl:ObjectProperty ; rdfs:domain hg2:HistoricalRelation ; rdfs:range hg2:Place ;
+  rdfs:label "relatie van plaats"@nl .
+hg2:relationObject a owl:ObjectProperty ; rdfs:domain hg2:HistoricalRelation ; rdfs:range hg2:Place ;
+  rdfs:label "relatie naar plaats"@nl .
+hg2:relationType a owl:ObjectProperty ; rdfs:domain hg2:HistoricalRelation ; rdfs:range skos:Concept ;
+  rdfs:label "historisch relatietype"@nl ;
+  rdfs:comment "Gebruik een beheerste lijst relatietypen; directe equivalentie met legacy-hg-relaties is nog niet vastgesteld."@nl .
+
+hg2:hasGeometry a owl:ObjectProperty ; rdfs:domain hg2:PlaceState ; rdfs:range geo:Geometry ;
+  rdfs:label "heeft geometrie"@nl ;
+  rdfs:comment "Geometrie van een tijdgebonden toestand; gebruik geo:asWKT voor WKT-literals."@nl .
+
+hg2:sourceRecord a owl:ObjectProperty ; rdfs:domain hg2:PlaceAssertion ;
+  rdfs:label "afgeleid van bronrecord"@nl ; rdfs:subPropertyOf prov:wasDerivedFrom .
+
+hg2:confidenceNote a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range xsd:string ;
+  rdfs:label "toelichting onzekerheid"@nl ;
+  rdfs:comment "Tekstuele vastlegging van onzekerheid, zonder kunstmatige numerieke zekerheid te vereisen."@nl .

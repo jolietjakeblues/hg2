@@ -1,0 +1,27 @@
+@prefix hg2: <https://linkeddata.cultureelerfgoed.nl/def/hg2/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+hg2:PlaceStateShape a sh:NodeShape ;
+  sh:targetClass hg2:PlaceState ;
+  sh:property [sh:path hg2:stateOf ; sh:class hg2:Place ; sh:minCount 1 ; sh:maxCount 1 ; sh:message "Een toestand moet bij precies één plaats horen."@nl ] ;
+  sh:property [sh:path hg2:validDuring ; sh:class time:TemporalEntity ; sh:maxCount 1 ; sh:severity sh:Warning ; sh:message "Leg waar bekend de periode van de toestand vast."@nl ] ;
+  sh:property [sh:path hg2:hasGeometry ; sh:class geo:Geometry ] .
+
+hg2:PlaceAssertionShape a sh:NodeShape ;
+  sh:targetClass hg2:PlaceAssertion ;
+  sh:or (
+    [sh:property [sh:path hg2:aboutPlace ; sh:minCount 1]]
+    [sh:property [sh:path hg2:aboutState ; sh:minCount 1]]
+    [sh:property [sh:path hg2:assertsRelation ; sh:minCount 1]]
+  ) ;
+  sh:property [sh:path prov:wasDerivedFrom ; sh:minCount 1 ; sh:severity sh:Warning ; sh:message "Bronverantwoording ontbreekt."@nl ] .
+
+hg2:HistoricalRelationShape a sh:NodeShape ;
+  sh:targetClass hg2:HistoricalRelation ;
+  sh:property [sh:path hg2:relationSubject ; sh:class hg2:Place ; sh:minCount 1 ; sh:maxCount 1] ;
+  sh:property [sh:path hg2:relationObject ; sh:class hg2:Place ; sh:minCount 1 ; sh:maxCount 1] ;
+  sh:property [sh:path hg2:relationType ; sh:minCount 1 ; sh:maxCount 1] .
