@@ -10,7 +10,7 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 <https://linkeddata.cultureelerfgoed.nl/def/hg2> a owl:Ontology ;
-  owl:versionInfo "0.2.0-draft" ;
+  owl:versionInfo "0.3.0-draft" ;
   dct:title "Histograph 2: historische geografie en bronuitspraken"@nl ;
   dct:description "Experimentele ontologie voor geografische identiteit, tijdgebonden toestanden, bronuitspraken en historische relaties. Geen formele vervanging van rdf.histograph.io."@nl .
 
@@ -106,3 +106,12 @@ hg2:observedSubject a owl:ObjectProperty ;
 hg2:sourceDescription a owl:DatatypeProperty ;
   rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ;
   rdfs:label "bronvermelding als tekst"@nl .
+
+
+# HG2 v0.3: letterlijke gemeentegeschiedenisvelden, zonder identiteitsaanname.
+hg2:observedIdentifier a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ; rdfs:label "identifier volgens bronrecord"@nl .
+hg2:observedStartDate a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ; rdfs:label "begindatering volgens bronrecord"@nl ; rdfs:comment "Bronwaarde; zegt zonder nadere bronduiding niet dat een duurzame bestuurlijke entiteit op dit moment is ontstaan."@nl .
+hg2:observedEndDate a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ; rdfs:label "einddatering volgens bronrecord"@nl .
+hg2:observedCBSCode a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ; rdfs:label "CBS-code volgens bronrecord"@nl .
+hg2:observedExternalReference a owl:ObjectProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:label "verwijzing in bronrecord"@nl ; rdfs:comment "Behoudt een URI-koppeling als RDF-IRI; geen owl:sameAs-veronderstelling."@nl .
+hg2:observedExternalReferenceLiteral a owl:DatatypeProperty ; rdfs:domain hg2:PlaceAssertion ; rdfs:range rdfs:Literal ; rdfs:label "letterlijke verwijzing in bronrecord"@nl .

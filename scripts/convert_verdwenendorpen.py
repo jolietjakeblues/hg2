@@ -14,7 +14,8 @@ def convert(src, out):
     with gzip.open(src,'rt',encoding='utf-8') as f: ds.parse(data=f.read(),format='trig')
     source=Graph()
     for s,p,o,g in ds.quads((None,None,None,None)): source.add((s,p,o))
-    outg=Graph()
+    result=Dataset()
+    outg=result.graph(URIRef('https://linkeddata.cultureelerfgoed.nl/graph/verdwenendorpen'))
     for p,n in [('hg2',HG2),('dc',DC),('geo',GEO),('prov',PROV)]: outg.bind(p,n)
     records=sorted(set(source.subjects(DC.title,None)),key=str)
     for original in records:
@@ -37,8 +38,8 @@ def convert(src, out):
             outg.add((geom,RDF.type,GEO.Geometry))
             outg.add((geom,GEO.asWKT,wkt))
             outg.add((assertion,HG2.observedGeometry,geom))
-    outg.serialize(destination=out,format='turtle')
+    result.serialize(destination=out,format='trig')
     print(f'{len(records)} bronrecords, {len(outg)} RDF-triples')
 if __name__=='__main__':
-    if len(sys.argv)!=3: raise SystemExit('Gebruik: python convert_verdwenendorpen.py bron.trig.gz uitvoer.ttl')
+    if len(sys.argv)!=3: raise SystemExit('Gebruik: python convert_verdwenendorpen.py bron.trig.gz uitvoer.trig')
     convert(sys.argv[1],sys.argv[2])

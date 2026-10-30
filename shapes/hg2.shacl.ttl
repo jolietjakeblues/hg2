@@ -37,3 +37,12 @@ hg2:ObservationShape a sh:NodeShape ;
   sh:targetClass hg2:PlaceAssertion ;
   sh:property [ sh:path hg2:observedGeometry ; sh:class geo:Geometry ] ;
   sh:property [ sh:path hg2:aboutPlaceReference ; sh:class hg2:PlaceReference ; sh:maxCount 1 ] .
+
+
+# HG2 v0.3 - brongetrouwe gemeenterecords
+hg2:MunicipalityObservationShape a sh:NodeShape ;
+  sh:targetSubjectsOf hg2:observedStartDate ;
+  sh:property [ sh:path hg2:aboutPlaceReference ; sh:class hg2:PlaceReference ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hg2:sourceRecord ; sh:minCount 1 ] ;
+  sh:property [ sh:path hg2:observedStartDate ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hg2:observedEndDate ; sh:maxCount 1 ] .
